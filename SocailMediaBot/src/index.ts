@@ -11,12 +11,13 @@ import dotenv from "dotenv";
 import { handleBotCommands, setListOfCommands } from "./bot/commands";
 import { handleBotErrors } from "./bot/errors/errors.handle";
 import { setupYoutubeCommands } from "./bot/youtubeDownloader";
-
+import ytpl from "@distube/ytpl";
 import ytdl from "@distube/ytdl-core";
-import createLogger from 'progress-estimator'
+import { ytmp3, ytmp4 } from "ruhend-scraper";
+import createLogger from "progress-estimator";
 import { handleYoutube } from "./bot/socialhandlers/youtube.handler";
 dotenv.config();
-
+// CHECK CLOUDFLARE WORKERS
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
@@ -29,7 +30,11 @@ if (!token) {
 const bot = new TelegramBot(token, { polling: true });
 // const logger = createLogger()
 
-
+(async () => {
+    const write = fs.createWriteStream('./text.txt')
+//    fs.createReadStream('./src/downloads/text')
+   write.write('hello world!')
+})();
 // // Database Connection
 // AppDataSource.initialize()
 //     .then(() => {
@@ -39,14 +44,12 @@ const bot = new TelegramBot(token, { polling: true });
 //         console.error("Error connecting to database:", error);
 //     });
 
-
 // After bot initialization
 setListOfCommands(bot);
 handleBotCommands(bot);
 handleBotErrors(bot);
-handleYoutube(bot)
+handleYoutube(bot);
 
-console.log("bot started ")
+console.log("bot started ");
 
 export default app;
-

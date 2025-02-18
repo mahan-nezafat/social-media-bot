@@ -6,7 +6,8 @@ export const setListOfCommands = (bot: TelegramBot) => {
             { command: "start", description: "start the bot" },
             { command: "about", description: "about the bot" },
             { command: "help", description: "how to use the bot" },
-            { command: "youtube", description: "access youtube downloader" },
+            { command: "youtube", description: "access youtube single downloader" },
+            { command: "playlist", description: "access youtube playlist downloader" },
         ]);
     } catch (error) {
         console.log(error);
@@ -69,4 +70,21 @@ export const handleBotCommands = async (bot: TelegramBot) => {
             console.log(error);
         }
     });
+    bot.onText(/\/playlist/, async (msg) => {
+        try {
+            const chatId = msg.chat.id;
+            const respose =
+                msg.from.language_code === "en"
+                    ? `send a valid url link`
+                    : `لینک صحیح را ارسال کنید`;
+            await bot.sendMessage(chatId, respose);
+        } catch (error) {
+            console.log(error);
+        }
+    });
 };
+
+
+export const selectFormat = async (bot: TelegramBot) => {
+    
+}
