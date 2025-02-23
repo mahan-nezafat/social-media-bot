@@ -1,13 +1,22 @@
 import TelegramBot from "node-telegram-bot-api";
 
+export const commandsMap = new Map();
+
 export const setListOfCommands = (bot: TelegramBot) => {
     try {
         bot.setMyCommands([
             { command: "start", description: "start the bot" },
             { command: "about", description: "about the bot" },
             { command: "help", description: "how to use the bot" },
-            { command: "youtube", description: "access youtube single downloader" },
-            { command: "playlist", description: "access youtube playlist downloader" },
+            {
+                command: "youtube",
+                description: "access youtube single downloader",
+            },
+            {
+                command: "playlist",
+                description: "access youtube playlist downloader",
+            },
+            { command: "llama3", description: "chat with llama3" },
         ]);
     } catch (error) {
         console.log(error);
@@ -59,7 +68,11 @@ export const handleBotCommands = async (bot: TelegramBot) => {
         }
     });
     bot.onText(/\/youtube/, async (msg) => {
+        
         try {
+            commandsMap.delete(msg.chat.id);
+            commandsMap.set(msg.chat.id, "youtube");
+            console.log(commandsMap);
             const chatId = msg.chat.id;
             const respose =
                 msg.from.language_code === "en"
@@ -71,12 +84,32 @@ export const handleBotCommands = async (bot: TelegramBot) => {
         }
     });
     bot.onText(/\/playlist/, async (msg) => {
+        
         try {
+            commandsMap.delete(msg.chat.id);
+            commandsMap.set(msg.chat.id, "playlist");
+            console.log(commandsMap);
             const chatId = msg.chat.id;
             const respose =
                 msg.from.language_code === "en"
-                    ? `send a valid url link`
+                    ? `send a valid playlist url link`
                     : `لینک صحیح را ارسال کنید`;
+            await bot.sendMessage(chatId, respose);
+        } catch (error) {
+            console.log(error);
+        }
+    });
+    bot.onText(/\/llama3/, async (msg) => {
+        try {
+            commandsMap.delete(msg.chat.id);
+            commandsMap.set(msg.chat.id, "llama3");
+            const chatId = msg.chat.id;
+            console.log(commandsMap);
+
+            const respose =
+                msg.from.language_code === "en"
+                    ? `type a prompt to talk with llama3`
+                    : `یک پرامپت بنویسید تا با لاما صحبت کنید`;
             await bot.sendMessage(chatId, respose);
         } catch (error) {
             console.log(error);
@@ -84,7 +117,4 @@ export const handleBotCommands = async (bot: TelegramBot) => {
     });
 };
 
-
-export const selectFormat = async (bot: TelegramBot) => {
-    
-}
+export const selectFormat = async (bot: TelegramBot) => {};

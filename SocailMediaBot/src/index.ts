@@ -16,6 +16,9 @@ import ytdl from "@distube/ytdl-core";
 import { ytmp3, ytmp4 } from "ruhend-scraper";
 import createLogger from "progress-estimator";
 import { handleYoutube } from "./bot/socialhandlers/youtube.handler";
+import { handleLlama3 } from "./bot/aihandlers/llama3.handler";
+import { handleYoutubePlaylist } from "./bot/socialhandlers/youtube.playlist.handler";
+
 dotenv.config();
 // CHECK CLOUDFLARE WORKERS
 const app: Express = express();
@@ -28,13 +31,11 @@ if (!token) {
 }
 
 const bot = new TelegramBot(token, { polling: true });
-// const logger = createLogger()
 
-(async () => {
-    const write = fs.createWriteStream('./text.txt')
-//    fs.createReadStream('./src/downloads/text')
-   write.write('hello world!')
-})();
+
+//CREATE PLAYLIST
+//CREATE IMAGE GEN 
+
 // // Database Connection
 // AppDataSource.initialize()
 //     .then(() => {
@@ -49,7 +50,8 @@ setListOfCommands(bot);
 handleBotCommands(bot);
 handleBotErrors(bot);
 handleYoutube(bot);
-
+handleLlama3(bot)
+handleYoutubePlaylist(bot)
 console.log("bot started ");
 
 export default app;
