@@ -10,7 +10,7 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import { handleBotCommands, setListOfCommands } from "./bot/commands";
 import { handleBotErrors } from "./bot/errors/errors.handle";
-import { setupYoutubeCommands } from "./bot/youtubeDownloader";
+// import { setupYoutubeCommands } from "./bot/youtubeDownloader";
 import ytpl from "@distube/ytpl";
 import ytdl from "@distube/ytdl-core";
 import { ytmp3, ytmp4 } from "ruhend-scraper";
