@@ -33,7 +33,7 @@ if (!token) {
 const bot = new TelegramBot(token, { polling: true });
 
 
-//CREATE PLAYLIST
+
 //CREATE IMAGE GEN 
 
 // // Database Connection

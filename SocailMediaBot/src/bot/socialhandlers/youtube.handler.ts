@@ -25,11 +25,13 @@ export const handleYoutube = async (bot: TelegramBot) => {
         async (msg) => {
             try {
                 const userCommand = commandsMap.get(msg.chat.id);
-
+                const regex = /\/(https:\/\/|www.|)(youtube.com|youtu.be)\/.+/
                 if (userCommand !== "youtube") return;
 
                 messageId = msg.chat.id;
                 url = msg.text;
+                if(!regex.test(url)) return await bot.sendMessage(msg.chat.id, "please send a valid link")
+                console.log(url)
                 const { formats, videoDetails } = await ytdl
                     .getInfo(url)
                     .then((info) => info);
@@ -45,14 +47,7 @@ export const handleYoutube = async (bot: TelegramBot) => {
                 );
 
                 contentTitle = videoDetails.title;
-                // validate url
-                // if (!ytdl.validateURL(url)) return;
-                // const { formats, videoDetails } = await ytdl.getInfo(url);
-
-                // map formats to readable input for user
-                // console.log(formats.filter((format) =>
-                //     format.mimeType.includes("video/mp4")
-                // ))
+                
                 const formatArray = [
                     [
                         {
@@ -94,12 +89,7 @@ export const handleYoutube = async (bot: TelegramBot) => {
 
                 const sentMsg = await bot.sendMessage(
                     msg.chat.id,
-                    `
-                        name: ${videoDetails.title}
-                        video-duration: ${Math.floor(
-                            Number(formats[0].approxDurationMs) / 1000 / 60
-                        )} minutes
-                        `
+                    `name: ${videoDetails.title} \nvideo-duration: ${Math.floor( Number(formats[0].approxDurationMs) / 1000 / 60)} minutes`
                 );
                 // send formats for user to choose
                 const markup = await bot.sendMessage(msg.chat.id, "choose your quality", {
@@ -183,7 +173,7 @@ export const handleYoutube = async (bot: TelegramBot) => {
                     .pipe(fs.createWriteStream(fileName))
                     .on("finish", () => {
                         console.log("uploading the video file...");
-                        bot.sendVideo(messageId, fileName);
+                        bot.sendDocument(messageId, fileName);
                     });
             }
         } catch (error) {

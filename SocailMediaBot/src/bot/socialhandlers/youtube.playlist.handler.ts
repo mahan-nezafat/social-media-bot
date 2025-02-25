@@ -7,7 +7,7 @@ import ytdl from "@distube/ytdl-core";
 import progress from "progress-stream";
 import cliProgress from "cli-progress";
 export const handleYoutubePlaylist = async (bot: TelegramBot) => {
-    // bot.onText(/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.*[?&]list=.*/i, async (msg) => {
+    const regex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.*[?&]list=.*/i
 
     const playlistPath = path.join(__dirname, "../../downloads/playlist");
     if (!fs.existsSync(playlistPath)) {
@@ -18,7 +18,8 @@ export const handleYoutubePlaylist = async (bot: TelegramBot) => {
             const chatId = msg.chat.id;
             const userCommand = commandsMap.get(chatId);
             if (userCommand !== "playlist") return;
-            const playlistData = await ytpl(msg.text, { limit: 10 });
+            if(!regex.test(msg.text)) return await bot.sendMessage(msg.chat.id, "please send a valid link")
+            const playlistData = await ytpl(msg.text);
 
             for (const item of playlistData.items) {
                 const info = await ytdl

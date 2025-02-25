@@ -30,9 +30,8 @@ export const handleBotCommands = async (bot: TelegramBot) => {
     // starting the bot and greeting user
     bot.onText(/\/start/, async (msg) => {
         try {
-            console.log(msg);
-            console.log(msg.chat);
             const chatId = msg.chat.id;
+            commandsMap.delete(chatId);
             const respose =
                 msg.from.language_code === "en"
                     ? `hello ${msg.chat.first_name} the bot has started.`
@@ -68,12 +67,12 @@ export const handleBotCommands = async (bot: TelegramBot) => {
         }
     });
     bot.onText(/\/youtube/, async (msg) => {
-        
         try {
-            commandsMap.delete(msg.chat.id);
-            commandsMap.set(msg.chat.id, "youtube");
-            console.log(commandsMap);
             const chatId = msg.chat.id;
+            if (commandsMap.get(chatId) === "youtube") return
+            commandsMap.delete(chatId);
+            commandsMap.set(chatId, "youtube");
+            console.log(commandsMap);
             const respose =
                 msg.from.language_code === "en"
                     ? `send a valid url link`
@@ -84,12 +83,12 @@ export const handleBotCommands = async (bot: TelegramBot) => {
         }
     });
     bot.onText(/\/playlist/, async (msg) => {
-        
         try {
-            commandsMap.delete(msg.chat.id);
-            commandsMap.set(msg.chat.id, "playlist");
-            console.log(commandsMap);
             const chatId = msg.chat.id;
+            if (commandsMap.get(chatId) === "playlist") return
+            commandsMap.delete(chatId);
+            commandsMap.set(chatId, "playlist");
+            console.log(commandsMap);
             const respose =
                 msg.from.language_code === "en"
                     ? `send a valid playlist url link`
@@ -101,9 +100,10 @@ export const handleBotCommands = async (bot: TelegramBot) => {
     });
     bot.onText(/\/llama3/, async (msg) => {
         try {
-            commandsMap.delete(msg.chat.id);
-            commandsMap.set(msg.chat.id, "llama3");
             const chatId = msg.chat.id;
+            if (commandsMap.get(chatId) === "llama3") return
+            commandsMap.delete(chatId);
+            commandsMap.set(chatId, "llama3");
             console.log(commandsMap);
 
             const respose =
